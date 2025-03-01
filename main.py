@@ -23,7 +23,7 @@ class Question:
     difficulty: str
     category: str
 
-# === Database Simulation ===
+# === Initialize Session State ===
 if 'users' not in st.session_state:
     st.session_state.users = {}
     
@@ -131,15 +131,15 @@ def create_user():
         submit = st.form_submit_button("Join Games")
         
         if submit and name:
-            # Format user ID with leading zeros
+            # Assign a unique ID starting from 01
             user_id = st.session_state.next_user_id
             st.session_state.next_user_id += 1
             
+            # Create new user and store in session state
             new_user = User(id=user_id, name=name)
             st.session_state.users[user_id] = new_user
             st.session_state.current_user = user_id
             
-            # Only add to waiting users when they select a game
             st.success(f"Welcome {name}! Your user ID is: {user_id:02d}")
             st.rerun()
 
@@ -575,7 +575,7 @@ def waiting_room():
     </style>
     """, unsafe_allow_html=True)
     
-    # Check every few seconds if a match is available
+    # Poll for a match
     time.sleep(2)
     st.rerun()
 
